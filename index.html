@@ -1,0 +1,2070 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Discover Greece — Where Mythology Meets Paradise</title>
+    <meta name="description" content="Experience the luxury of Greece. From Santorini sunsets to ancient Athens, discover a world where mythology meets paradise.">
+    <meta name="keywords" content="Greece, travel, Santorini, Athens, luxury travel, Greek islands, tourism">
+    <meta name="author" content="Discover Greece">
+    <meta name="theme-color" content="#0A6FFF">
+
+    <meta property="og:title" content="Discover Greece — Where Mythology Meets Paradise">
+    <meta property="og:description" content="Experience the luxury of Greece. From Santorini sunsets to ancient Athens.">
+    <meta property="og:type" content="website">
+    <meta property="og:image" content="https://images.unsplash.com/photo-1570077188670-e3a8d69ac5ff?w=1200">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Inter:wght@200;300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <script src="https://unpkg.com/lenis@1.1.13/dist/lenis.min.js"></script>
+
+    <style>
+        :root {
+            --aegean-blue: #0A6FFF;
+            --aegean-deep: #054099;
+            --aegean-light: #4A9FFF;
+            --gold: #D4AF37;
+            --gold-light: #F0D878;
+            --gold-dark: #B8941F;
+            --marble: #F8F6F0;
+            --marble-dark: #E8E4D8;
+            --navy: #0A1628;
+            --navy-light: #1A2A42;
+            --sea-cyan: #00B4D8;
+            --sunset: #FF6B35;
+            --turquoise: #40E0D0;
+            --white: #FFFFFF;
+            --glass: rgba(255, 255, 255, 0.08);
+            --glass-border: rgba(255, 255, 255, 0.15);
+            --glass-strong: rgba(255, 255, 255, 0.12);
+
+            --font-display: 'Playfair Display', serif;
+            --font-body: 'Inter', sans-serif;
+            --font-accent: 'Cormorant Garamond', serif;
+
+            --ease-luxury: cubic-bezier(0.16, 1, 0.3, 1);
+            --ease-smooth: cubic-bezier(0.4, 0, 0.2, 1);
+            --ease-elastic: cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            --ease-expo-out: cubic-bezier(0.19, 1, 0.22, 1);
+        }
+
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+                scroll-behavior: auto !important;
+            }
+            .cursor, .cursor-dot, .cursor-trail { display: none !important; }
+            body { cursor: auto; }
+        }
+
+        html { font-size: 16px; scroll-behavior: auto; }
+        html.lenis, html.lenis body { height: auto; }
+        .lenis.lenis-smooth { scroll-behavior: auto !important; }
+        .lenis.lenis-smooth [data-lenis-prevent] { overscroll-behavior: contain; }
+        .lenis.lenis-stopped { overflow: hidden; }
+
+        body {
+            font-family: var(--font-body);
+            background: var(--navy);
+            color: var(--white);
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            cursor: none;
+        }
+
+        ::selection { background: var(--gold); color: var(--navy); }
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: var(--navy); }
+        ::-webkit-scrollbar-thumb { background: var(--aegean-blue); border-radius: 3px; }
+
+        /* Custom Cursor */
+        .cursor {
+            position: fixed; top: 0; left: 0;
+            width: 20px; height: 20px;
+            border: 1px solid var(--gold); border-radius: 50%;
+            pointer-events: none; z-index: 99999;
+            transition: transform 0.15s var(--ease-smooth), width 0.3s, height 0.3s, background 0.3s;
+            mix-blend-mode: difference;
+            transform: translate(-50%, -50%);
+        }
+        .cursor.hover { width: 60px; height: 60px; background: rgba(212, 175, 55, 0.1); border-color: var(--gold-light); }
+        .cursor-dot {
+            position: fixed; top: 0; left: 0;
+            width: 6px; height: 6px; background: var(--gold);
+            border-radius: 50%; pointer-events: none; z-index: 99999;
+            transform: translate(-50%, -50%);
+        }
+        .cursor-trail {
+            position: fixed; top: 0; left: 0;
+            width: 40px; height: 40px;
+            border: 1px solid rgba(212, 175, 55, 0.3); border-radius: 50%;
+            pointer-events: none; z-index: 99998;
+            transform: translate(-50%, -50%);
+            transition: transform 0.4s var(--ease-smooth);
+        }
+
+        /* Loading Screen */
+        .loading-screen {
+            position: fixed; inset: 0; background: var(--navy); z-index: 100000;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            transition: opacity 1s var(--ease-expo-out), visibility 1s;
+        }
+        .loading-screen.hidden { opacity: 0; visibility: hidden; }
+        .loading-logo {
+            font-family: var(--font-display); font-size: clamp(2rem, 5vw, 4rem);
+            font-weight: 400; letter-spacing: 0.3em; color: var(--gold);
+            margin-bottom: 2rem; opacity: 0;
+            animation: fadeInUp 1s var(--ease-expo-out) 0.3s forwards;
+        }
+        .loading-bar-container {
+            width: 200px; height: 1px; background: rgba(255,255,255,0.1);
+            overflow: hidden; border-radius: 1px;
+        }
+        .loading-bar { height: 100%; width: 0%;
+            background: linear-gradient(90deg, var(--gold), var(--gold-light));
+            transition: width 0.3s var(--ease-smooth);
+        }
+        .loading-text {
+            font-family: var(--font-accent); font-size: 0.875rem;
+            letter-spacing: 0.2em; color: rgba(255,255,255,0.5);
+            margin-top: 1.5rem; opacity: 0;
+            animation: fadeInUp 1s var(--ease-expo-out) 0.5s forwards;
+        }
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Navigation */
+        .nav-progress {
+            position: fixed; top: 0; left: 0; height: 2px;
+            background: linear-gradient(90deg, var(--gold), var(--gold-light));
+            z-index: 1001; transform-origin: left; transform: scaleX(0);
+        }
+        .nav {
+            position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+            padding: 1.5rem 3rem; display: flex; align-items: center; justify-content: space-between;
+            transition: all 0.6s var(--ease-smooth);
+            opacity: 0; transform: translateY(-20px);
+        }
+        .nav.visible { opacity: 1; transform: translateY(0); }
+        .nav.scrolled {
+            background: rgba(10, 22, 40, 0.85);
+            backdrop-filter: blur(20px) saturate(1.5);
+            -webkit-backdrop-filter: blur(20px) saturate(1.5);
+            border-bottom: 1px solid var(--glass-border);
+            padding: 1rem 3rem;
+        }
+        .nav-logo {
+            font-family: var(--font-display); font-size: 1.5rem; font-weight: 600;
+            color: var(--white); text-decoration: none; letter-spacing: 0.15em;
+            position: relative; overflow: hidden;
+        }
+        .nav-logo::after {
+            content: ''; position: absolute; bottom: -2px; left: 0;
+            width: 100%; height: 1px; background: var(--gold);
+            transform: scaleX(0); transform-origin: right;
+            transition: transform 0.6s var(--ease-expo-out);
+        }
+        .nav-logo:hover::after { transform: scaleX(1); transform-origin: left; }
+        .nav-links { display: flex; gap: 2.5rem; list-style: none; }
+        .nav-link {
+            font-family: var(--font-body); font-size: 0.8rem; font-weight: 400;
+            letter-spacing: 0.15em; text-transform: uppercase;
+            color: rgba(255,255,255,0.7); text-decoration: none;
+            position: relative; padding: 0.5rem 0;
+            transition: color 0.3s var(--ease-smooth);
+        }
+        .nav-link::after {
+            content: ''; position: absolute; bottom: 0; left: 0;
+            width: 0; height: 1px; background: var(--gold);
+            transition: width 0.4s var(--ease-expo-out);
+        }
+        .nav-link:hover { color: var(--white); }
+        .nav-link:hover::after { width: 100%; }
+        .nav-cta {
+            padding: 0.75rem 1.75rem; border: 1px solid var(--gold); background: transparent;
+            color: var(--gold); font-family: var(--font-body); font-size: 0.75rem;
+            letter-spacing: 0.2em; text-transform: uppercase; cursor: pointer;
+            position: relative; overflow: hidden;
+            transition: all 0.4s var(--ease-smooth);
+        }
+        .nav-cta::before {
+            content: ''; position: absolute; inset: 0; background: var(--gold);
+            transform: scaleX(0); transform-origin: right;
+            transition: transform 0.4s var(--ease-expo-out); z-index: -1;
+        }
+        .nav-cta:hover { color: var(--navy); }
+        .nav-cta:hover::before { transform: scaleX(1); transform-origin: left; }
+
+        /* Hero */
+        .hero {
+            position: relative; width: 100%; height: 100vh;
+            overflow: hidden; display: flex; align-items: center; justify-content: center;
+        }
+        .hero-canvas { position: absolute; inset: 0; z-index: 1; }
+        .hero-overlay {
+            position: absolute; inset: 0; z-index: 2;
+            background: linear-gradient(to bottom, rgba(10,22,40,0.3) 0%, rgba(10,22,40,0.1) 40%, rgba(10,22,40,0.6) 100%);
+        }
+        .hero-content { position: relative; z-index: 3; text-align: center; padding: 2rem; }
+        .hero-eyebrow {
+            font-family: var(--font-accent); font-size: clamp(0.875rem, 1.5vw, 1.125rem);
+            font-weight: 300; letter-spacing: 0.4em; text-transform: uppercase;
+            color: var(--gold); margin-bottom: 2rem;
+            opacity: 0; transform: translateY(30px);
+        }
+        .hero-title {
+            font-family: var(--font-display); font-size: clamp(3rem, 10vw, 9rem);
+            font-weight: 400; line-height: 0.95; letter-spacing: -0.02em;
+            color: var(--white); margin-bottom: 1.5rem;
+        }
+        .hero-title .line { display: block; overflow: hidden; }
+        .hero-title .line span { display: inline-block; opacity: 0; transform: translateY(100%); }
+        .hero-subtitle {
+            font-family: var(--font-accent); font-size: clamp(1rem, 2vw, 1.5rem);
+            font-weight: 300; font-style: italic; color: rgba(255,255,255,0.7);
+            letter-spacing: 0.05em; margin-bottom: 3rem;
+            opacity: 0; transform: translateY(20px);
+        }
+        .hero-cta-group { display: flex; gap: 1.5rem; justify-content: center; flex-wrap: wrap;
+            opacity: 0; transform: translateY(20px);
+        }
+        .hero-cta {
+            padding: 1rem 2.5rem; font-family: var(--font-body); font-size: 0.8rem;
+            letter-spacing: 0.2em; text-transform: uppercase; cursor: pointer;
+            position: relative; overflow: hidden;
+            transition: all 0.4s var(--ease-smooth); border: none;
+        }
+        .hero-cta-primary { background: var(--gold); color: var(--navy); }
+        .hero-cta-primary::before {
+            content: ''; position: absolute; inset: 0; background: var(--white);
+            transform: scaleX(0); transform-origin: right;
+            transition: transform 0.4s var(--ease-expo-out); z-index: 0;
+        }
+        .hero-cta-primary:hover::before { transform: scaleX(1); transform-origin: left; }
+        .hero-cta-primary span { position: relative; z-index: 1; }
+        .hero-cta-secondary { background: transparent; color: var(--white); border: 1px solid rgba(255,255,255,0.3); }
+        .hero-cta-secondary::before {
+            content: ''; position: absolute; inset: 0; background: var(--white);
+            transform: scaleX(0); transform-origin: right;
+            transition: transform 0.4s var(--ease-expo-out); z-index: 0;
+        }
+        .hero-cta-secondary:hover { color: var(--navy); border-color: var(--white); }
+        .hero-cta-secondary:hover::before { transform: scaleX(1); transform-origin: left; }
+        .hero-cta-secondary span { position: relative; z-index: 1; }
+        .hero-scroll-indicator {
+            position: absolute; bottom: 3rem; left: 50%; transform: translateX(-50%);
+            z-index: 3; display: flex; flex-direction: column; align-items: center;
+            gap: 0.75rem; opacity: 0;
+        }
+        .hero-scroll-text { font-family: var(--font-body); font-size: 0.65rem;
+            letter-spacing: 0.3em; text-transform: uppercase; color: rgba(255,255,255,0.5);
+        }
+        .hero-scroll-line { width: 1px; height: 60px;
+            background: linear-gradient(to bottom, var(--gold), transparent);
+            animation: scrollPulse 2s ease-in-out infinite;
+        }
+        @keyframes scrollPulse {
+            0%, 100% { transform: scaleY(1); opacity: 1; }
+            50% { transform: scaleY(0.5); opacity: 0.5; }
+        }
+
+        /* Section Base */
+        .section { position: relative; width: 100%; padding: 10rem 0; overflow: hidden; }
+        .section-header { text-align: center; margin-bottom: 6rem; padding: 0 2rem; }
+        .section-eyebrow {
+            font-family: var(--font-accent); font-size: 0.875rem;
+            letter-spacing: 0.4em; text-transform: uppercase;
+            color: var(--gold); margin-bottom: 1.5rem; display: inline-block;
+        }
+        .section-title {
+            font-family: var(--font-display); font-size: clamp(2.5rem, 5vw, 4.5rem);
+            font-weight: 400; line-height: 1.1; color: var(--white); margin-bottom: 1.5rem;
+        }
+        .section-subtitle {
+            font-family: var(--font-body); font-size: clamp(0.9rem, 1.5vw, 1.1rem);
+            font-weight: 300; color: rgba(255,255,255,0.6);
+            max-width: 600px; margin: 0 auto; line-height: 1.7;
+        }
+
+        /* Destinations */
+        .destinations-section { background: var(--navy); }
+        .destinations-grid {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem; padding: 0 3rem; max-width: 1400px; margin: 0 auto;
+        }
+        .destination-card {
+            position: relative; border-radius: 16px; overflow: hidden;
+            aspect-ratio: 3/4; cursor: pointer;
+            transform-style: preserve-3d; perspective: 1000px;
+        }
+        .destination-card-inner {
+            position: relative; width: 100%; height: 100%;
+            transition: transform 0.6s var(--ease-smooth);
+            transform-style: preserve-3d;
+        }
+        .destination-card:hover .destination-card-inner {
+            transform: rotateY(5deg) rotateX(-5deg) scale(1.02);
+        }
+        .destination-card-image {
+            position: absolute; inset: 0;
+            background-size: cover; background-position: center;
+            transition: transform 0.8s var(--ease-smooth);
+        }
+        .destination-card:hover .destination-card-image { transform: scale(1.1); }
+        .destination-card-overlay {
+            position: absolute; inset: 0;
+            background: linear-gradient(to top, rgba(10,22,40,0.95) 0%, rgba(10,22,40,0.4) 50%, rgba(10,22,40,0.1) 100%);
+            transition: background 0.4s var(--ease-smooth);
+        }
+        .destination-card:hover .destination-card-overlay {
+            background: linear-gradient(to top, rgba(10,22,40,0.98) 0%, rgba(10,22,40,0.5) 50%, rgba(10,22,40,0.2) 100%);
+        }
+        .destination-card-content {
+            position: absolute; bottom: 0; left: 0; right: 0;
+            padding: 2rem; transform: translateZ(30px);
+        }
+        .destination-card-number {
+            font-family: var(--font-display); font-size: 4rem; font-weight: 600;
+            color: rgba(255,255,255,0.05); position: absolute;
+            top: 1rem; right: 1.5rem; line-height: 1;
+        }
+        .destination-card-tag {
+            font-family: var(--font-body); font-size: 0.7rem;
+            letter-spacing: 0.2em; text-transform: uppercase;
+            color: var(--gold); margin-bottom: 0.75rem;
+            display: inline-block; padding: 0.25rem 0.75rem;
+            background: rgba(212, 175, 55, 0.15); border-radius: 20px;
+        }
+        .destination-card-title {
+            font-family: var(--font-display); font-size: 1.75rem;
+            font-weight: 400; color: var(--white); margin-bottom: 0.5rem;
+        }
+        .destination-card-desc {
+            font-family: var(--font-body); font-size: 0.85rem;
+            color: rgba(255,255,255,0.6); line-height: 1.6;
+            margin-bottom: 1.5rem; max-height: 0; overflow: hidden;
+            transition: max-height 0.5s var(--ease-smooth), margin 0.5s;
+        }
+        .destination-card:hover .destination-card-desc { max-height: 100px; margin-bottom: 1.5rem; }
+        .destination-card-btn {
+            display: inline-flex; align-items: center; gap: 0.5rem;
+            font-family: var(--font-body); font-size: 0.75rem;
+            letter-spacing: 0.15em; text-transform: uppercase;
+            color: var(--gold); text-decoration: none;
+            opacity: 0; transform: translateY(10px);
+            transition: all 0.4s var(--ease-smooth) 0.1s;
+        }
+        .destination-card:hover .destination-card-btn { opacity: 1; transform: translateY(0); }
+        .destination-card-btn svg { width: 16px; height: 16px;
+            transition: transform 0.3s var(--ease-smooth);
+        }
+        .destination-card-btn:hover svg { transform: translateX(4px); }
+
+        /* History */
+        .history-section {
+            background: linear-gradient(180deg, var(--navy) 0%, var(--navy-light) 50%, var(--navy) 100%);
+        }
+        .history-timeline {
+            position: relative; max-width: 1200px;
+            margin: 0 auto; padding: 0 3rem;
+        }
+        .history-timeline::before {
+            content: ''; position: absolute; left: 50%; top: 0; bottom: 0;
+            width: 1px;
+            background: linear-gradient(to bottom, transparent 0%, var(--gold) 10%, var(--gold) 90%, transparent 100%);
+            transform: translateX(-50%);
+        }
+        .timeline-item {
+            position: relative; display: flex; align-items: center;
+            margin-bottom: 8rem; opacity: 0; transform: translateY(60px);
+        }
+        .timeline-item:nth-child(even) { flex-direction: row-reverse; }
+        .timeline-content { width: 45%; padding: 2rem; }
+        .timeline-item:nth-child(even) .timeline-content { text-align: right; }
+        .timeline-year {
+            font-family: var(--font-display); font-size: clamp(3rem, 6vw, 5rem);
+            font-weight: 600; color: rgba(212, 175, 55, 0.15); line-height: 1; margin-bottom: 0.5rem;
+        }
+        .timeline-title {
+            font-family: var(--font-display); font-size: 1.75rem;
+            font-weight: 400; color: var(--white); margin-bottom: 1rem;
+        }
+        .timeline-desc {
+            font-family: var(--font-body); font-size: 0.9rem;
+            color: rgba(255,255,255,0.6); line-height: 1.7;
+        }
+        .timeline-image {
+            width: 45%; aspect-ratio: 4/3; border-radius: 12px;
+            overflow: hidden; position: relative;
+        }
+        .timeline-image img { width: 100%; height: 100%; object-fit: cover;
+            transition: transform 0.8s var(--ease-smooth);
+        }
+        .timeline-item:hover .timeline-image img { transform: scale(1.05); }
+        .timeline-dot {
+            position: absolute; left: 50%; top: 50%;
+            transform: translate(-50%, -50%);
+            width: 16px; height: 16px; background: var(--gold);
+            border-radius: 50%; border: 3px solid var(--navy);
+            z-index: 2; box-shadow: 0 0 20px rgba(212, 175, 55, 0.4);
+        }
+        .timeline-dot::after {
+            content: ''; position: absolute; inset: -8px;
+            border: 1px solid rgba(212, 175, 55, 0.3); border-radius: 50%;
+            animation: pulse 2s ease-in-out infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.5); opacity: 0; }
+        }
+
+        /* Beaches */
+        .beaches-section { background: var(--navy); padding: 0; }
+        .beaches-gallery {
+            display: flex; gap: 1rem; padding: 0 1rem;
+            overflow-x: auto; scroll-snap-type: x mandatory;
+            scrollbar-width: none; -ms-overflow-style: none;
+        }
+        .beaches-gallery::-webkit-scrollbar { display: none; }
+        .beach-item {
+            flex: 0 0 80vw; max-width: 900px; height: 70vh; min-height: 500px;
+            border-radius: 20px; overflow: hidden; position: relative;
+            scroll-snap-align: center; cursor: pointer;
+        }
+        .beach-item-image {
+            position: absolute; inset: 0;
+            background-size: cover; background-position: center;
+            transition: transform 1s var(--ease-smooth);
+        }
+        .beach-item:hover .beach-item-image { transform: scale(1.05); }
+        .beach-item-overlay {
+            position: absolute; inset: 0;
+            background: linear-gradient(to top, rgba(10,22,40,0.9) 0%, transparent 60%);
+        }
+        .beach-item-content { position: absolute; bottom: 0; left: 0; right: 0; padding: 3rem; }
+        .beach-item-name {
+            font-family: var(--font-display); font-size: clamp(2rem, 4vw, 3.5rem);
+            font-weight: 400; color: var(--white); margin-bottom: 0.5rem;
+        }
+        .beach-item-location {
+            font-family: var(--font-body); font-size: 0.85rem;
+            letter-spacing: 0.2em; text-transform: uppercase; color: var(--gold);
+        }
+
+        /* Culture */
+        .culture-section {
+            background: linear-gradient(135deg, var(--navy) 0%, var(--navy-light) 100%);
+        }
+        .culture-grid {
+            display: grid; grid-template-columns: repeat(3, 1fr);
+            gap: 2rem; padding: 0 3rem; max-width: 1400px; margin: 0 auto;
+        }
+        .culture-card {
+            background: var(--glass); backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border); border-radius: 20px;
+            padding: 3rem 2rem; text-align: center;
+            transition: all 0.5s var(--ease-smooth);
+            position: relative; overflow: hidden;
+        }
+        .culture-card::before {
+            content: ''; position: absolute; top: 0; left: 0; right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--gold), transparent);
+            transform: scaleX(0);
+            transition: transform 0.6s var(--ease-expo-out);
+        }
+        .culture-card:hover::before { transform: scaleX(1); }
+        .culture-card:hover {
+            transform: translateY(-10px);
+            border-color: rgba(212, 175, 55, 0.3);
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+        .culture-icon {
+            width: 64px; height: 64px; margin: 0 auto 1.5rem;
+            display: flex; align-items: center; justify-content: center;
+            border-radius: 50%; background: rgba(212, 175, 55, 0.1);
+            border: 1px solid rgba(212, 175, 55, 0.2);
+            transition: all 0.4s var(--ease-smooth);
+        }
+        .culture-card:hover .culture-icon {
+            background: rgba(212, 175, 55, 0.2); transform: scale(1.1);
+        }
+        .culture-icon svg { width: 28px; height: 28px;
+            stroke: var(--gold); fill: none; stroke-width: 1.5;
+        }
+        .culture-title {
+            font-family: var(--font-display); font-size: 1.25rem;
+            font-weight: 400; color: var(--white); margin-bottom: 0.75rem;
+        }
+        .culture-desc {
+            font-family: var(--font-body); font-size: 0.85rem;
+            color: rgba(255,255,255,0.6); line-height: 1.6;
+        }
+
+        /* Planner */
+        .planner-section { background: var(--navy); }
+        .planner-container { max-width: 1000px; margin: 0 auto; padding: 0 3rem; }
+        .planner-card {
+            background: var(--glass); backdrop-filter: blur(30px);
+            -webkit-backdrop-filter: blur(30px);
+            border: 1px solid var(--glass-border); border-radius: 24px;
+            padding: 3rem; position: relative; overflow: hidden;
+        }
+        .planner-card::after {
+            content: ''; position: absolute; top: -50%; right: -50%;
+            width: 100%; height: 100%;
+            background: radial-gradient(circle, rgba(212, 175, 55, 0.05) 0%, transparent 70%);
+            pointer-events: none;
+        }
+        .planner-form { display: grid; grid-template-columns: repeat(2, 1fr); gap: 2rem; }
+        .planner-field { position: relative; }
+        .planner-field.full-width { grid-column: 1 / -1; }
+        .planner-label {
+            font-family: var(--font-body); font-size: 0.7rem;
+            letter-spacing: 0.2em; text-transform: uppercase;
+            color: rgba(255,255,255,0.5); margin-bottom: 0.75rem; display: block;
+        }
+        .planner-input {
+            width: 100%; padding: 1rem 1.25rem;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1); border-radius: 12px;
+            color: var(--white); font-family: var(--font-body); font-size: 0.9rem;
+            transition: all 0.3s var(--ease-smooth); outline: none;
+        }
+        .planner-input:focus {
+            border-color: var(--gold); background: rgba(255,255,255,0.08);
+            box-shadow: 0 0 20px rgba(212, 175, 55, 0.1);
+        }
+        .planner-input::placeholder { color: rgba(255,255,255,0.3); }
+        .planner-select {
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='rgba(255,255,255,0.5)' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat; background-position: right 1rem center;
+        }
+        .planner-submit {
+            grid-column: 1 / -1; padding: 1.25rem;
+            background: linear-gradient(135deg, var(--gold), var(--gold-dark));
+            border: none; border-radius: 12px; color: var(--navy);
+            font-family: var(--font-body); font-size: 0.85rem; font-weight: 500;
+            letter-spacing: 0.2em; text-transform: uppercase; cursor: pointer;
+            position: relative; overflow: hidden;
+            transition: all 0.4s var(--ease-smooth);
+        }
+        .planner-submit:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 40px rgba(212, 175, 55, 0.3);
+        }
+        .planner-result {
+            grid-column: 1 / -1; margin-top: 2rem; padding: 2rem;
+            background: rgba(212, 175, 55, 0.05);
+            border: 1px solid rgba(212, 175, 55, 0.2); border-radius: 16px;
+            display: none;
+        }
+        .planner-result.visible { display: block; animation: fadeInUp 0.6s var(--ease-expo-out); }
+
+        /* Testimonials */
+        .testimonials-section {
+            background: linear-gradient(180deg, var(--navy) 0%, var(--navy-light) 100%);
+        }
+        .testimonials-grid {
+            display: grid; grid-template-columns: repeat(3, 1fr);
+            gap: 2rem; padding: 0 3rem; max-width: 1400px; margin: 0 auto;
+        }
+        .testimonial-card {
+            background: var(--glass); backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border); border-radius: 20px;
+            padding: 2.5rem; position: relative;
+            transition: all 0.5s var(--ease-smooth);
+        }
+        .testimonial-card:hover {
+            transform: translateY(-8px) scale(1.02);
+            border-color: rgba(212, 175, 55, 0.2);
+        }
+        .testimonial-quote {
+            font-family: var(--font-accent); font-size: 3rem;
+            color: var(--gold); line-height: 1; margin-bottom: 1rem; opacity: 0.5;
+        }
+        .testimonial-text {
+            font-family: var(--font-body); font-size: 0.9rem;
+            color: rgba(255,255,255,0.7); line-height: 1.8;
+            margin-bottom: 2rem; font-style: italic;
+        }
+        .testimonial-author { display: flex; align-items: center; gap: 1rem; }
+        .testimonial-avatar {
+            width: 48px; height: 48px; border-radius: 50%;
+            object-fit: cover; border: 2px solid rgba(212, 175, 55, 0.3);
+        }
+        .testimonial-name { font-family: var(--font-body); font-size: 0.9rem; font-weight: 500; color: var(--white); }
+        .testimonial-role { font-family: var(--font-body); font-size: 0.75rem; color: rgba(255,255,255,0.5); }
+        .testimonial-stars { display: flex; gap: 0.25rem; margin-top: 0.5rem; }
+        .testimonial-stars svg { width: 14px; height: 14px; fill: var(--gold); }
+
+        /* FAQ */
+        .faq-section { background: var(--navy); }
+        .faq-container { max-width: 800px; margin: 0 auto; padding: 0 3rem; }
+        .faq-item { border-bottom: 1px solid rgba(255,255,255,0.08); overflow: hidden; }
+        .faq-question {
+            width: 100%; padding: 1.5rem 0;
+            display: flex; align-items: center; justify-content: space-between;
+            background: none; border: none; color: var(--white);
+            font-family: var(--font-body); font-size: 1rem; font-weight: 400;
+            text-align: left; cursor: pointer;
+            transition: color 0.3s var(--ease-smooth);
+        }
+        .faq-question:hover { color: var(--gold); }
+        .faq-icon {
+            width: 24px; height: 24px; position: relative;
+            flex-shrink: 0; margin-left: 1rem;
+        }
+        .faq-icon::before, .faq-icon::after {
+            content: ''; position: absolute; background: currentColor;
+            transition: all 0.4s var(--ease-smooth);
+        }
+        .faq-icon::before { width: 12px; height: 1px; top: 50%; left: 50%; transform: translate(-50%, -50%); }
+        .faq-icon::after { width: 1px; height: 12px; top: 50%; left: 50%; transform: translate(-50%, -50%); }
+        .faq-item.active .faq-icon::after { transform: translate(-50%, -50%) rotate(90deg); opacity: 0; }
+        .faq-answer { max-height: 0; overflow: hidden;
+            transition: max-height 0.5s var(--ease-smooth), padding 0.5s;
+        }
+        .faq-item.active .faq-answer { max-height: 300px; padding-bottom: 1.5rem; }
+        .faq-answer p { font-family: var(--font-body); font-size: 0.9rem;
+            color: rgba(255,255,255,0.6); line-height: 1.7;
+        }
+
+        /* Footer */
+        .footer { position: relative; background: var(--navy); padding: 8rem 0 3rem; overflow: hidden; }
+        .footer-waves { position: absolute; top: 0; left: 0; right: 0; height: 200px; overflow: hidden; }
+        .footer-wave {
+            position: absolute; bottom: 0; left: 0; width: 200%; height: 100%;
+            background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 320'%3E%3Cpath fill='rgba(10, 22, 40, 0.5)' fill-opacity='1' d='M0,96L48,112C96,128,192,160,288,160C384,160,480,128,576,112C672,96,768,96,864,112C960,128,1056,160,1152,160C1248,160,1344,128,1392,112L1440,96L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z'%3E%3C/path%3E%3C/svg%3E") repeat-x;
+            background-size: 50% 100%;
+            animation: wave 15s linear infinite;
+        }
+        .footer-wave:nth-child(2) { animation-delay: -5s; opacity: 0.5; animation-duration: 20s; }
+        .footer-wave:nth-child(3) { animation-delay: -10s; opacity: 0.3; animation-duration: 25s; }
+        @keyframes wave { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
+        .footer-content {
+            position: relative; z-index: 2; max-width: 1400px;
+            margin: 0 auto; padding: 0 3rem;
+            display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 4rem;
+        }
+        .footer-brand { max-width: 300px; }
+        .footer-logo {
+            font-family: var(--font-display); font-size: 1.75rem;
+            font-weight: 600; color: var(--white); margin-bottom: 1rem; letter-spacing: 0.1em;
+        }
+        .footer-desc {
+            font-family: var(--font-body); font-size: 0.85rem;
+            color: rgba(255,255,255,0.5); line-height: 1.7; margin-bottom: 2rem;
+        }
+        .footer-social { display: flex; gap: 1rem; }
+        .footer-social-link {
+            width: 40px; height: 40px; border-radius: 50%;
+            border: 1px solid rgba(255,255,255,0.15);
+            display: flex; align-items: center; justify-content: center;
+            color: rgba(255,255,255,0.6); text-decoration: none;
+            transition: all 0.3s var(--ease-smooth);
+        }
+        .footer-social-link:hover { border-color: var(--gold); color: var(--gold); transform: translateY(-3px); }
+        .footer-column-title {
+            font-family: var(--font-body); font-size: 0.75rem; font-weight: 500;
+            letter-spacing: 0.2em; text-transform: uppercase;
+            color: var(--gold); margin-bottom: 1.5rem;
+        }
+        .footer-links { list-style: none; }
+        .footer-link { margin-bottom: 0.75rem; }
+        .footer-link a {
+            font-family: var(--font-body); font-size: 0.85rem;
+            color: rgba(255,255,255,0.5); text-decoration: none;
+            transition: color 0.3s var(--ease-smooth); position: relative;
+        }
+        .footer-link a::after {
+            content: ''; position: absolute; bottom: -2px; left: 0;
+            width: 0; height: 1px; background: var(--gold);
+            transition: width 0.3s var(--ease-smooth);
+        }
+        .footer-link a:hover { color: var(--white); }
+        .footer-link a:hover::after { width: 100%; }
+        .footer-bottom {
+            position: relative; z-index: 2; max-width: 1400px;
+            margin: 4rem auto 0; padding: 2rem 3rem 0;
+            border-top: 1px solid rgba(255,255,255,0.08);
+            display: flex; justify-content: space-between; align-items: center;
+        }
+        .footer-copyright { font-family: var(--font-body); font-size: 0.75rem; color: rgba(255,255,255,0.4); }
+        .footer-legal { display: flex; gap: 2rem; }
+        .footer-legal a { font-family: var(--font-body); font-size: 0.75rem;
+            color: rgba(255,255,255,0.4); text-decoration: none;
+            transition: color 0.3s var(--ease-smooth);
+        }
+        .footer-legal a:hover { color: var(--gold); }
+
+        /* Particles */
+        .particles-container { position: fixed; inset: 0; pointer-events: none; z-index: 0; overflow: hidden; }
+        .particle {
+            position: absolute; width: 3px; height: 3px;
+            background: var(--gold); border-radius: 50%; opacity: 0.3;
+            animation: floatParticle linear infinite;
+        }
+        @keyframes floatParticle {
+            0% { transform: translateY(100vh) rotate(0deg); opacity: 0; }
+            10% { opacity: 0.3; } 90% { opacity: 0.3; }
+            100% { transform: translateY(-100px) rotate(720deg); opacity: 0; }
+        }
+
+        /* Ripple */
+        .ripple {
+            position: fixed; border-radius: 50%;
+            background: radial-gradient(circle, rgba(212, 175, 55, 0.3) 0%, transparent 70%);
+            pointer-events: none; z-index: 9998; transform: translate(-50%, -50%);
+            animation: rippleExpand 1s ease-out forwards;
+        }
+        @keyframes rippleExpand {
+            0% { width: 0; height: 0; opacity: 1; }
+            100% { width: 300px; height: 300px; opacity: 0; }
+        }
+
+        /* Magnetic */
+        .magnetic { transition: transform 0.3s var(--ease-smooth); }
+
+        /* Olympus Easter Egg */
+        .olympus-mode {
+            position: fixed; inset: 0;
+            background: linear-gradient(135deg, #1a0a2e 0%, #16213e 50%, #0f3460 100%);
+            z-index: 99999; display: none; align-items: center; justify-content: center;
+            flex-direction: column; animation: fadeIn 0.5s var(--ease-smooth);
+        }
+        .olympus-mode.active { display: flex; }
+        .olympus-title { font-family: var(--font-display); font-size: clamp(2rem, 5vw, 4rem);
+            color: var(--gold); margin-bottom: 1rem; text-align: center;
+        }
+        .olympus-subtitle { font-family: var(--font-accent); font-size: 1.25rem;
+            color: rgba(255,255,255,0.7); margin-bottom: 3rem; text-align: center;
+        }
+        .olympus-close {
+            padding: 1rem 2rem; background: transparent;
+            border: 1px solid var(--gold); color: var(--gold);
+            font-family: var(--font-body); font-size: 0.8rem;
+            letter-spacing: 0.2em; text-transform: uppercase; cursor: pointer;
+            transition: all 0.3s var(--ease-smooth);
+        }
+        .olympus-close:hover { background: var(--gold); color: var(--navy); }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .destinations-grid { grid-template-columns: repeat(2, 1fr); }
+            .culture-grid, .testimonials-grid { grid-template-columns: repeat(2, 1fr); }
+            .footer-content { grid-template-columns: 1fr 1fr; }
+            .history-timeline::before { left: 20px; }
+            .timeline-item, .timeline-item:nth-child(even) { flex-direction: column; padding-left: 50px; }
+            .timeline-content, .timeline-image { width: 100%; }
+            .timeline-item:nth-child(even) .timeline-content { text-align: left; }
+            .timeline-dot { left: 20px; }
+        }
+        @media (max-width: 768px) {
+            .nav { padding: 1rem 1.5rem; }
+            .nav-links { display: none; }
+            .destinations-grid, .culture-grid, .testimonials-grid { grid-template-columns: 1fr; padding: 0 1.5rem; }
+            .planner-form { grid-template-columns: 1fr; }
+            .footer-content { grid-template-columns: 1fr; gap: 2rem; }
+            .footer-bottom { flex-direction: column; gap: 1rem; text-align: center; }
+            .section { padding: 6rem 0; }
+            .cursor, .cursor-dot, .cursor-trail { display: none; }
+            body { cursor: auto; }
+        }
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; }
+            .hero-canvas { display: none; }
+            .hero { background: linear-gradient(135deg, var(--navy) 0%, var(--aegean-deep) 100%); }
+        }
+    </style>
+</head>
+<body>
+
+    <noscript>
+        <div style="position:fixed;inset:0;z-index:999999;background:#0A1628;color:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:2rem;font-family:sans-serif;">
+            <h1 style="font-family:'Playfair Display',serif;color:#D4AF37;margin-bottom:1rem;">Discover Greece</h1>
+            <p style="max-width:480px;line-height:1.6;">This site relies on JavaScript for its animations and interactive features. Please enable JavaScript in your browser to view the full experience.</p>
+        </div>
+    </noscript>
+
+    <!-- Loading Screen -->
+    <div class="loading-screen" id="loadingScreen">
+        <div class="loading-logo">DISCOVER GREECE</div>
+        <div class="loading-bar-container">
+            <div class="loading-bar" id="loadingBar"></div>
+        </div>
+        <div class="loading-text">Preparing your journey...</div>
+    </div>
+
+    <!-- Custom Cursor -->
+    <div class="cursor" id="cursor"></div>
+    <div class="cursor-dot" id="cursorDot"></div>
+    <div class="cursor-trail" id="cursorTrail"></div>
+
+    <!-- Floating Particles -->
+    <div class="particles-container" id="particles"></div>
+
+    <!-- Navigation -->
+    <div class="nav-progress" id="navProgress"></div>
+    <nav class="nav" id="nav">
+        <a href="#" class="nav-logo">DISCOVER GREECE</a>
+        <ul class="nav-links">
+            <li><a href="#destinations" class="nav-link">Destinations</a></li>
+            <li><a href="#history" class="nav-link">History</a></li>
+            <li><a href="#beaches" class="nav-link">Beaches</a></li>
+            <li><a href="#culture" class="nav-link">Culture</a></li>
+            <li><a href="#planner" class="nav-link">Plan Trip</a></li>
+        </ul>
+        <button class="nav-cta magnetic">Book Now</button>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero" id="hero">
+        <canvas class="hero-canvas" id="heroCanvas"></canvas>
+        <div class="hero-overlay"></div>
+        <div class="hero-content">
+            <div class="hero-eyebrow">Welcome to Paradise</div>
+            <h1 class="hero-title">
+                <span class="line"><span>DISCOVER</span></span>
+                <span class="line"><span>GREECE</span></span>
+            </h1>
+            <p class="hero-subtitle">Where mythology meets paradise</p>
+            <div class="hero-cta-group">
+                <button class="hero-cta hero-cta-primary magnetic">
+                    <span>Explore Greece</span>
+                </button>
+                <button class="hero-cta hero-cta-secondary magnetic">
+                    <span>Watch Journey</span>
+                </button>
+            </div>
+        </div>
+        <div class="hero-scroll-indicator">
+            <span class="hero-scroll-text">Scroll to explore</span>
+            <div class="hero-scroll-line"></div>
+        </div>
+    </section>
+
+    <!-- Destinations Section -->
+    <section class="section destinations-section" id="destinations">
+        <div class="section-header">
+            <span class="section-eyebrow">Explore</span>
+            <h2 class="section-title">Legendary Destinations</h2>
+            <p class="section-subtitle">From ancient temples to pristine beaches, discover the places that have captivated travelers for millennia.</p>
+        </div>
+        <div class="destinations-grid">
+            <div class="destination-card" data-tilt>
+                <div class="destination-card-inner">
+                    <div class="destination-card-image" style="background-image: url('https://images.unsplash.com/photo-1570077188670-e3a8d69ac5ff?w=800&q=80')"></div>
+                    <div class="destination-card-overlay"></div>
+                    <span class="destination-card-number">01</span>
+                    <div class="destination-card-content">
+                        <span class="destination-card-tag">Cyclades</span>
+                        <h3 class="destination-card-title">Santorini</h3>
+                        <p class="destination-card-desc">White-washed buildings perched on volcanic cliffs, overlooking the world's most famous sunset over the caldera.</p>
+                        <a href="#" class="destination-card-btn">
+                            Explore
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="destination-card" data-tilt>
+                <div class="destination-card-inner">
+                    <div class="destination-card-image" style="background-image: url('https://images.unsplash.com/photo-1555993539-1732b0258235?w=800&q=80')"></div>
+                    <div class="destination-card-overlay"></div>
+                    <span class="destination-card-number">02</span>
+                    <div class="destination-card-content">
+                        <span class="destination-card-tag">Attica</span>
+                        <h3 class="destination-card-title">Athens & Acropolis</h3>
+                        <p class="destination-card-desc">The cradle of Western civilization, where ancient temples stand as timeless monuments to human achievement.</p>
+                        <a href="#" class="destination-card-btn">
+                            Explore
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="destination-card" data-tilt>
+                <div class="destination-card-inner">
+                    <div class="destination-card-image" style="background-image: url('https://images.unsplash.com/photo-1533105079780-92b9be482077?w=800&q=80')"></div>
+                    <div class="destination-card-overlay"></div>
+                    <span class="destination-card-number">03</span>
+                    <div class="destination-card-content">
+                        <span class="destination-card-tag">Thessaly</span>
+                        <h3 class="destination-card-title">Meteora</h3>
+                        <p class="destination-card-desc">Monasteries suspended between heaven and earth atop towering sandstone pillars in a landscape of divine beauty.</p>
+                        <a href="#" class="destination-card-btn">
+                            Explore
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="destination-card" data-tilt>
+                <div class="destination-card-inner">
+                    <div class="destination-card-image" style="background-image: url('https://images.unsplash.com/photo-1601581875309-fafbf2d3ed2a?w=800&q=80')"></div>
+                    <div class="destination-card-overlay"></div>
+                    <span class="destination-card-number">04</span>
+                    <div class="destination-card-content">
+                        <span class="destination-card-tag">Ionian</span>
+                        <h3 class="destination-card-title">Zakynthos</h3>
+                        <p class="destination-card-desc">The iconic Shipwreck Beach with crystalline turquoise waters surrounded by towering white limestone cliffs.</p>
+                        <a href="#" class="destination-card-btn">
+                            Explore
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="destination-card" data-tilt>
+                <div class="destination-card-inner">
+                    <div class="destination-card-image" style="background-image: url('https://images.unsplash.com/photo-1533104816931-20fa691ff6ca?w=800&q=80')"></div>
+                    <div class="destination-card-overlay"></div>
+                    <span class="destination-card-number">05</span>
+                    <div class="destination-card-content">
+                        <span class="destination-card-tag">Cyclades</span>
+                        <h3 class="destination-card-title">Mykonos</h3>
+                        <p class="destination-card-desc">Vibrant nightlife meets traditional windmills and pristine beaches on Greece's most cosmopolitan island.</p>
+                        <a href="#" class="destination-card-btn">
+                            Explore
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="destination-card" data-tilt>
+                <div class="destination-card-inner">
+                    <div class="destination-card-image" style="background-image: url('https://images.unsplash.com/photo-1503152394-c571994fd383?w=800&q=80')"></div>
+                    <div class="destination-card-overlay"></div>
+                    <span class="destination-card-number">06</span>
+                    <div class="destination-card-content">
+                        <span class="destination-card-tag">Crete</span>
+                        <h3 class="destination-card-title">Crete</h3>
+                        <p class="destination-card-desc">The largest Greek island, home to the ancient Palace of Knossos, dramatic gorges, and legendary hospitality.</p>
+                        <a href="#" class="destination-card-btn">
+                            Explore
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- History Section -->
+    <section class="section history-section" id="history">
+        <div class="section-header">
+            <span class="section-eyebrow">Through the Ages</span>
+            <h2 class="section-title">Ancient History</h2>
+            <p class="section-subtitle">Walk through millennia of civilization, from the dawn of democracy to the height of classical art and philosophy.</p>
+        </div>
+        <div class="history-timeline">
+            <div class="timeline-item">
+                <div class="timeline-content">
+                    <div class="timeline-year">3000 BC</div>
+                    <h3 class="timeline-title">The Minoan Civilization</h3>
+                    <p class="timeline-desc">Europe's first advanced civilization flourished on Crete, building magnificent palaces and developing a sophisticated maritime trade network across the Mediterranean.</p>
+                </div>
+                <div class="timeline-dot"></div>
+                <div class="timeline-image">
+                    <img src="https://images.unsplash.com/photo-1560707303-4e9808838767?w=600&q=80" alt="Ancient ruins" loading="lazy">
+                </div>
+            </div>
+
+            <div class="timeline-item">
+                <div class="timeline-content">
+                    <div class="timeline-year">508 BC</div>
+                    <h3 class="timeline-title">Birth of Democracy</h3>
+                    <p class="timeline-desc">Cleisthenes reforms Athens, establishing the world's first democracy. The Agora becomes the beating heart of political life, philosophy, and public discourse.</p>
+                </div>
+                <div class="timeline-dot"></div>
+                <div class="timeline-image">
+                    <img src="https://images.unsplash.com/photo-1555993539-1732b0258235?w=600&q=80" alt="Athens" loading="lazy">
+                </div>
+            </div>
+
+            <div class="timeline-item">
+                <div class="timeline-content">
+                    <div class="timeline-year">447 BC</div>
+                    <h3 class="timeline-title">The Parthenon</h3>
+                    <p class="timeline-desc">Pericles commissions the Parthenon, a masterpiece of Doric architecture that would become the enduring symbol of classical Greece and Western civilization.</p>
+                </div>
+                <div class="timeline-dot"></div>
+                <div class="timeline-image">
+                    <img src="https://images.unsplash.com/photo-1603565816030-6b389eeb23cb?w=600&q=80" alt="Parthenon" loading="lazy">
+                </div>
+            </div>
+
+            <div class="timeline-item">
+                <div class="timeline-content">
+                    <div class="timeline-year">336 BC</div>
+                    <h3 class="timeline-title">Alexander the Great</h3>
+                    <p class="timeline-desc">From Macedonia, Alexander conquers an empire stretching from Greece to India, spreading Hellenistic culture across three continents and reshaping the ancient world.</p>
+                </div>
+                <div class="timeline-dot"></div>
+                <div class="timeline-image">
+                    <img src="https://images.unsplash.com/photo-1555993539-1732b0258235?w=600&q=80" alt="Ancient Macedonia" loading="lazy">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Beaches Section -->
+    <section class="section beaches-section" id="beaches">
+        <div class="section-header">
+            <span class="section-eyebrow">Paradise Found</span>
+            <h2 class="section-title">Crystal Waters</h2>
+            <p class="section-subtitle">Swipe through Greece's most breathtaking beaches, where turquoise waters meet golden sands and dramatic coastlines.</p>
+        </div>
+        <div class="beaches-gallery">
+            <div class="beach-item">
+                <div class="beach-item-image" style="background-image: url('https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=1200&q=80')"></div>
+                <div class="beach-item-overlay"></div>
+                <div class="beach-item-content">
+                    <h3 class="beach-item-name">Navagio Beach</h3>
+                    <span class="beach-item-location">Zakynthos, Ionian Islands</span>
+                </div>
+            </div>
+
+            <div class="beach-item">
+                <div class="beach-item-image" style="background-image: url('https://images.unsplash.com/photo-1519046904884-53103b34b206?w=1200&q=80')"></div>
+                <div class="beach-item-overlay"></div>
+                <div class="beach-item-content">
+                    <h3 class="beach-item-name">Elafonissi</h3>
+                    <span class="beach-item-location">Crete</span>
+                </div>
+            </div>
+
+            <div class="beach-item">
+                <div class="beach-item-image" style="background-image: url('https://images.unsplash.com/photo-1506929562872-bb421503ef21?w=1200&q=80')"></div>
+                <div class="beach-item-overlay"></div>
+                <div class="beach-item-content">
+                    <h3 class="beach-item-name">Balos Lagoon</h3>
+                    <span class="beach-item-location">Crete</span>
+                </div>
+            </div>
+
+            <div class="beach-item">
+                <div class="beach-item-image" style="background-image: url('https://images.unsplash.com/photo-1500375592092-40eb2168fd21?w=1200&q=80')"></div>
+                <div class="beach-item-overlay"></div>
+                <div class="beach-item-content">
+                    <h3 class="beach-item-name">Myrtos Beach</h3>
+                    <span class="beach-item-location">Kefalonia, Ionian Islands</span>
+                </div>
+            </div>
+
+            <div class="beach-item">
+                <div class="beach-item-image" style="background-image: url('https://images.unsplash.com/photo-1510414842594-a61c69b5ae57?w=1200&q=80')"></div>
+                <div class="beach-item-overlay"></div>
+                <div class="beach-item-content">
+                    <h3 class="beach-item-name">Red Beach</h3>
+                    <span class="beach-item-location">Santorini, Cyclades</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Culture Section -->
+    <section class="section culture-section" id="culture">
+        <div class="section-header">
+            <span class="section-eyebrow">Living Heritage</span>
+            <h2 class="section-title">Greek Culture</h2>
+            <p class="section-subtitle">Immerse yourself in traditions that have endured for thousands of years, from ancient philosophy to modern Mediterranean life.</p>
+        </div>
+        <div class="culture-grid">
+            <div class="culture-card">
+                <div class="culture-icon">
+                    <svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+                </div>
+                <h3 class="culture-title">Philosophy</h3>
+                <p class="culture-desc">From Socrates to Aristotle, Greece birthed Western philosophy. Walk the same streets where great minds questioned existence and shaped human thought.</p>
+            </div>
+
+            <div class="culture-card">
+                <div class="culture-icon">
+                    <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+                </div>
+                <h3 class="culture-title">Mythology</h3>
+                <p class="culture-desc">The gods of Olympus, heroic legends, and epic tales form the foundation of Western storytelling. Every mountain and sea has its myth.</p>
+            </div>
+
+            <div class="culture-card">
+                <div class="culture-icon">
+                    <svg viewBox="0 0 24 24"><path d="M12 3v18M3 12h18M5.6 5.6l12.8 12.8M18.4 5.6L5.6 18.4"/></svg>
+                </div>
+                <h3 class="culture-title">Cuisine</h3>
+                <p class="culture-desc">Mediterranean flavors perfected over millennia. Olive oil, feta, fresh seafood, and herbs create a culinary tradition recognized by UNESCO.</p>
+            </div>
+
+            <div class="culture-card">
+                <div class="culture-icon">
+                    <svg viewBox="0 0 24 24"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>
+                </div>
+                <h3 class="culture-title">Music</h3>
+                <p class="culture-desc">From ancient lyres to modern bouzouki, Greek music carries the soul of the nation. Rebetika, traditional folk, and contemporary sounds echo through tavernas.</p>
+            </div>
+
+            <div class="culture-card">
+                <div class="culture-icon">
+                    <svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                </div>
+                <h3 class="culture-title">Hospitality</h3>
+                <p class="culture-desc">Philoxenia — the love of strangers — is sacred in Greece. Guests are treated like family, a tradition rooted in ancient belief that gods walk among mortals.</p>
+            </div>
+
+            <div class="culture-card">
+                <div class="culture-icon">
+                    <svg viewBox="0 0 24 24"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
+                </div>
+                <h3 class="culture-title">Architecture</h3>
+                <p class="culture-desc">From Doric temples to Cycladic whitewashed villages, Greek architecture blends function with breathtaking beauty across millennia of innovation.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Travel Planner Section -->
+    <section class="section planner-section" id="planner">
+        <div class="section-header">
+            <span class="section-eyebrow">Your Adventure</span>
+            <h2 class="section-title">Plan Your Journey</h2>
+            <p class="section-subtitle">Design your perfect Greek escape. Tell us your preferences and we'll craft an unforgettable itinerary tailored just for you.</p>
+        </div>
+        <div class="planner-container">
+            <div class="planner-card">
+                <form class="planner-form" id="plannerForm">
+                    <div class="planner-field">
+                        <label class="planner-label">Your Name</label>
+                        <input type="text" class="planner-input" placeholder="Enter your name" required>
+                    </div>
+                    <div class="planner-field">
+                        <label class="planner-label">Email</label>
+                        <input type="email" class="planner-input" placeholder="your@email.com" required>
+                    </div>
+                    <div class="planner-field">
+                        <label class="planner-label">Destination</label>
+                        <select class="planner-input planner-select" required>
+                            <option value="">Select destination</option>
+                            <option value="santorini">Santorini</option>
+                            <option value="athens">Athens</option>
+                            <option value="mykonos">Mykonos</option>
+                            <option value="crete">Crete</option>
+                            <option value="zakynthos">Zakynthos</option>
+                            <option value="meteora">Meteora</option>
+                            <option value="rhodes">Rhodes</option>
+                            <option value="corfu">Corfu</option>
+                        </select>
+                    </div>
+                    <div class="planner-field">
+                        <label class="planner-label">Travel Dates</label>
+                        <input type="date" class="planner-input" required>
+                    </div>
+                    <div class="planner-field">
+                        <label class="planner-label">Duration</label>
+                        <select class="planner-input planner-select" required>
+                            <option value="">How long?</option>
+                            <option value="3">3 Days</option>
+                            <option value="5">5 Days</option>
+                            <option value="7">1 Week</option>
+                            <option value="10">10 Days</option>
+                            <option value="14">2 Weeks</option>
+                            <option value="21">3 Weeks</option>
+                        </select>
+                    </div>
+                    <div class="planner-field">
+                        <label class="planner-label">Travel Style</label>
+                        <select class="planner-input planner-select" required>
+                            <option value="">Your style</option>
+                            <option value="luxury">Luxury & Relaxation</option>
+                            <option value="adventure">Adventure & Exploration</option>
+                            <option value="culture">Culture & History</option>
+                            <option value="beach">Beach & Sun</option>
+                            <option value="food">Culinary Journey</option>
+                            <option value="family">Family Friendly</option>
+                        </select>
+                    </div>
+                    <div class="planner-field full-width">
+                        <label class="planner-label">Special Requests</label>
+                        <textarea class="planner-input" rows="3" placeholder="Tell us about any special requests, dietary needs, or must-see attractions..."></textarea>
+                    </div>
+                    <button type="submit" class="planner-submit magnetic">Create My Itinerary</button>
+
+                    <div class="planner-result" id="plannerResult">
+                        <h3 style="font-family: var(--font-display); font-size: 1.5rem; color: var(--gold); margin-bottom: 1rem;">Your Journey Awaits!</h3>
+                        <p style="font-family: var(--font-body); color: rgba(255,255,255,0.7); line-height: 1.7;">
+                            Thank you for sharing your travel dreams with us. Our team of Greek travel experts will craft a personalized itinerary and reach out to you within 24 hours with detailed recommendations, exclusive experiences, and the best accommodations for your adventure.
+                        </p>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials Section -->
+    <section class="section testimonials-section" id="testimonials">
+        <div class="section-header">
+            <span class="section-eyebrow">Stories</span>
+            <h2 class="section-title">Traveler Tales</h2>
+            <p class="section-subtitle">Hear from those who have experienced the magic of Greece and left with memories to last a lifetime.</p>
+        </div>
+        <div class="testimonials-grid">
+            <div class="testimonial-card">
+                <div class="testimonial-quote">"</div>
+                <p class="testimonial-text">Santorini at sunset was everything I dreamed and more. The way the light paints the white buildings in gold and amber is something no photograph can capture. We stayed in a cave hotel overlooking the caldera and it felt like we were floating above the clouds.</p>
+                <div class="testimonial-author">
+                    <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&q=80" alt="Sarah" loading="lazy" class="testimonial-avatar">
+                    <div>
+                        <div class="testimonial-name">Sarah Mitchell</div>
+                        <div class="testimonial-role">Travel Photographer, London</div>
+                        <div class="testimonial-stars">
+                            <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                            <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                            <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                            <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                            <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="testimonial-card">
+                <div class="testimonial-quote">"</div>
+                <p class="testimonial-text">Walking through the Acropolis at dawn, before the crowds arrived, was a spiritual experience. Standing before the Parthenon as the first light hit the marble columns, I felt connected to something ancient and eternal. Greece doesn't just show you history — it makes you feel it.</p>
+                <div class="testimonial-author">
+                    <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&q=80" alt="James" loading="lazy" class="testimonial-avatar">
+                    <div>
+                        <div class="testimonial-name">James Chen</div>
+                        <div class="testimonial-role">History Professor, Boston</div>
+                        <div class="testimonial-stars">
+                            <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                            <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                            <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                            <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                            <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="testimonial-card">
+                <div class="testimonial-quote">"</div>
+                <p class="testimonial-text">The food alone is worth the trip. We took a cooking class in a small village on Crete, learned to make moussaka and baklava from a grandmother who has been cooking for 60 years. The olive oil was pressed from trees in her garden. It was the most authentic culinary experience of my life.</p>
+                <div class="testimonial-author">
+                    <img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=100&q=80" alt="Elena" loading="lazy" class="testimonial-avatar">
+                    <div>
+                        <div class="testimonial-name">Elena Rodriguez</div>
+                        <div class="testimonial-role">Food Blogger, Barcelona</div>
+                        <div class="testimonial-stars">
+                            <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                            <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                            <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                            <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                            <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ Section -->
+    <section class="section faq-section" id="faq">
+        <div class="section-header">
+            <span class="section-eyebrow">Questions</span>
+            <h2 class="section-title">Common Questions</h2>
+            <p class="section-subtitle">Everything you need to know before embarking on your Greek adventure.</p>
+        </div>
+        <div class="faq-container">
+            <div class="faq-item">
+                <button class="faq-question">
+                    When is the best time to visit Greece?
+                    <span class="faq-icon"></span>
+                </button>
+                <div class="faq-answer">
+                    <p>The ideal time to visit Greece is from late April to early October. May, June, and September offer the perfect balance of warm weather, fewer crowds, and lower prices. July and August are peak season with the hottest temperatures and most tourists. For island hopping, late spring and early fall provide the most pleasant sailing conditions.</p>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <button class="faq-question">
+                    Do I need a visa to visit Greece?
+                    <span class="faq-icon"></span>
+                </button>
+                <div class="faq-answer">
+                    <p>Greece is part of the Schengen Area. Citizens of the EU, USA, Canada, Australia, and many other countries can enter visa-free for up to 90 days within a 180-day period. Always check the latest requirements with your local Greek embassy or consulate before traveling, as regulations may change.</p>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <button class="faq-question">
+                    How do I get around the Greek islands?
+                <span class="faq-icon"></span>
+                </button>
+                <div class="faq-answer">
+                    <p>Ferries are the primary mode of transportation between islands, with frequent connections during the summer months. High-speed ferries can cover long distances in just a few hours. For shorter hops, local boats and water taxis are available. Renting a car or scooter on larger islands like Crete and Rhodes gives you the freedom to explore at your own pace.</p>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <button class="faq-question">
+                    What should I pack for a trip to Greece?
+                    <span class="faq-icon"></span>
+                </button>
+                <div class="faq-answer">
+                    <p>Pack light, breathable clothing for the warm Mediterranean climate. Essentials include comfortable walking shoes (especially for archaeological sites), a wide-brimmed hat, high-SPF sunscreen, and a reusable water bottle. For evenings, bring a light jacket or wrap. If visiting churches or monasteries, modest clothing covering shoulders and knees is required.</p>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <button class="faq-question">
+                    Is Greece expensive for travelers?
+                    <span class="faq-icon"></span>
+                </button>
+                <div class="faq-answer">
+                    <p>Greece offers options for every budget. While luxury resorts in Santorini and Mykonos can be pricey, mainland Greece and lesser-known islands are quite affordable. A mid-range budget of 80-150 EUR per day covers comfortable accommodation, delicious meals, and local transportation. Street food like gyros and souvlaki offer delicious meals for under 5 EUR.</p>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <button class="faq-question">
+                    What are the must-try Greek dishes?
+                    <span class="faq-icon"></span>
+                </button>
+                <div class="faq-answer">
+                    <p>Beyond the famous moussaka and souvlaki, try spanakopita (spinach pie), dolmades (stuffed grape leaves), fresh grilled octopus, and horiatiki (Greek village salad). For dessert, don't miss loukoumades (honey puffs) and galaktoboureko (custard pie). Pair everything with local wine — Greece has over 300 indigenous grape varieties!</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer" id="footer">
+        <div class="footer-waves">
+            <div class="footer-wave"></div>
+            <div class="footer-wave"></div>
+            <div class="footer-wave"></div>
+        </div>
+        <div class="footer-content">
+            <div class="footer-brand">
+                <div class="footer-logo">DISCOVER GREECE</div>
+                <p class="footer-desc">Crafting unforgettable journeys through the cradle of Western civilization. Every trip is a story waiting to be told.</p>
+                <div class="footer-social">
+                    <a href="#" class="footer-social-link" aria-label="Instagram">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+                    </a>
+                    <a href="#" class="footer-social-link" aria-label="Twitter">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 3a10.9 10.9 0 0 1-3.14 1.53 4.48 4.48 0 0 0-7.86 3v1A10.66 10.66 0 0 1 3 4s-4 9 5 13a11.64 11.64 0 0 1-7 2c9 5 20 0 20-11.5a4.5 4.5 0 0 0-.08-.83A7.72 7.72 0 0 0 23 3z"/></svg>
+                    </a>
+                    <a href="#" class="footer-social-link" aria-label="Facebook">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
+                    </a>
+                    <a href="#" class="footer-social-link" aria-label="YouTube">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22.54 6.42a2.78 2.78 0 0 0-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.46a2.78 2.78 0 0 0-1.94 2A29 29 0 0 0 1 11.75a29 29 0 0 0 .46 5.33A2.78 2.78 0 0 0 3.4 19c1.72.46 8.6.46 8.6.46s6.88 0 8.6-.46a2.78 2.78 0 0 0 1.94-2 29 29 0 0 0 .46-5.25 29 29 0 0 0-.46-5.33z"/><polygon points="9.75 15.02 15.5 11.75 9.75 8.48 9.75 15.02"/></svg>
+                    </a>
+                </div>
+            </div>
+
+            <div class="footer-column">
+                <h4 class="footer-column-title">Destinations</h4>
+                <ul class="footer-links">
+                    <li class="footer-link"><a href="#">Santorini</a></li>
+                    <li class="footer-link"><a href="#">Athens</a></li>
+                    <li class="footer-link"><a href="#">Mykonos</a></li>
+                    <li class="footer-link"><a href="#">Crete</a></li>
+                    <li class="footer-link"><a href="#">Meteora</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-column">
+                <h4 class="footer-column-title">Experiences</h4>
+                <ul class="footer-links">
+                    <li class="footer-link"><a href="#">Island Hopping</a></li>
+                    <li class="footer-link"><a href="#">Culinary Tours</a></li>
+                    <li class="footer-link"><a href="#">Archaeological Sites</a></li>
+                    <li class="footer-link"><a href="#">Sailing Adventures</a></li>
+                    <li class="footer-link"><a href="#">Wellness Retreats</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-column">
+                <h4 class="footer-column-title">Company</h4>
+                <ul class="footer-links">
+                    <li class="footer-link"><a href="#">About Us</a></li>
+                    <li class="footer-link"><a href="#">Travel Blog</a></li>
+                    <li class="footer-link"><a href="#">Careers</a></li>
+                    <li class="footer-link"><a href="#">Contact</a></li>
+                    <li class="footer-link"><a href="#">Press</a></li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <div class="footer-copyright">2024 Discover Greece. All rights reserved.</div>
+            <div class="footer-legal">
+                <a href="#">Privacy Policy</a>
+                <a href="#">Terms of Service</a>
+                <a href="#">Cookies</a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Olympus Easter Egg -->
+    <div class="olympus-mode" id="olympusMode">
+        <h2 class="olympus-title">Welcome to Mount Olympus</h2>
+        <p class="olympus-subtitle">You have unlocked the realm of the gods. The ancient secrets of Greece are now revealed to you.</p>
+        <button class="olympus-close" id="olympusClose">Return to Mortal Realm</button>
+    </div>
+
+    <script>
+    // ============================================
+    // DISCOVER GREECE - MAIN APPLICATION
+    // ============================================
+
+    (function() {
+        'use strict';
+
+        // ============================================
+        // STATE
+        // ============================================
+        const state = {
+            isLoaded: false,
+            scrollProgress: 0,
+            mouseX: 0,
+            mouseY: 0,
+            targetMouseX: 0,
+            targetMouseY: 0,
+            konamiCode: [],
+            konamiSequence: ['ArrowUp','ArrowUp','ArrowDown','ArrowDown','ArrowLeft','ArrowRight','ArrowLeft','ArrowRight','b','a']
+        };
+
+        // ============================================
+        // LOADING SCREEN
+        // ============================================
+        function initLoading() {
+            const loadingBar = document.getElementById('loadingBar');
+            const loadingScreen = document.getElementById('loadingScreen');
+            let progress = 0;
+
+            const interval = setInterval(() => {
+                progress += Math.random() * 15;
+                if (progress >= 100) {
+                    progress = 100;
+                    clearInterval(interval);
+                    setTimeout(() => {
+                        loadingScreen.classList.add('hidden');
+                        state.isLoaded = true;
+                        initHeroAnimations();
+                    }, 500);
+                }
+                loadingBar.style.width = progress + '%';
+            }, 150);
+        }
+
+        // ============================================
+        // CUSTOM CURSOR
+        // ============================================
+        function initCursor() {
+            const cursor = document.getElementById('cursor');
+            const cursorDot = document.getElementById('cursorDot');
+            const cursorTrail = document.getElementById('cursorTrail');
+
+            if (window.matchMedia('(pointer: coarse)').matches) return;
+
+            document.addEventListener('mousemove', (e) => {
+                state.targetMouseX = e.clientX;
+                state.targetMouseY = e.clientY;
+            });
+
+            function updateCursor() {
+                state.mouseX += (state.targetMouseX - state.mouseX) * 0.15;
+                state.mouseY += (state.targetMouseY - state.mouseY) * 0.15;
+
+                cursor.style.left = state.mouseX + 'px';
+                cursor.style.top = state.mouseY + 'px';
+                cursorDot.style.left = state.targetMouseX + 'px';
+                cursorDot.style.top = state.targetMouseY + 'px';
+                cursorTrail.style.left = state.mouseX + 'px';
+                cursorTrail.style.top = state.mouseY + 'px';
+
+                requestAnimationFrame(updateCursor);
+            }
+            updateCursor();
+
+            // Hover effects
+            const hoverElements = document.querySelectorAll('a, button, .destination-card, .culture-card, .testimonial-card, .beach-item');
+            hoverElements.forEach(el => {
+                el.addEventListener('mouseenter', () => cursor.classList.add('hover'));
+                el.addEventListener('mouseleave', () => cursor.classList.remove('hover'));
+            });
+
+            // Ripple effect
+            document.addEventListener('click', (e) => {
+                const ripple = document.createElement('div');
+                ripple.className = 'ripple';
+                ripple.style.left = e.clientX + 'px';
+                ripple.style.top = e.clientY + 'px';
+                document.body.appendChild(ripple);
+                setTimeout(() => ripple.remove(), 1000);
+            });
+        }
+
+        // ============================================
+        // FLOATING PARTICLES
+        // ============================================
+        function initParticles() {
+            const container = document.getElementById('particles');
+            const particleCount = 25;
+
+            for (let i = 0; i < particleCount; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.animationDuration = (15 + Math.random() * 20) + 's';
+                particle.style.animationDelay = (Math.random() * 15) + 's';
+                particle.style.width = (2 + Math.random() * 3) + 'px';
+                particle.style.height = particle.style.width;
+                particle.style.opacity = 0.1 + Math.random() * 0.3;
+                container.appendChild(particle);
+            }
+        }
+
+        // ============================================
+        // THREE.JS HERO SCENE
+        // ============================================
+        function initHeroScene() {
+            const canvas = document.getElementById('heroCanvas');
+            if (!canvas) return;
+
+            const scene = new THREE.Scene();
+            const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+            const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true });
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+
+            // Create animated water surface
+            const waterGeometry = new THREE.PlaneGeometry(20, 20, 64, 64);
+            const waterMaterial = new THREE.ShaderMaterial({
+                uniforms: {
+                    uTime: { value: 0 },
+                    uMouse: { value: new THREE.Vector2(0.5, 0.5) },
+                    uColor1: { value: new THREE.Color('#0A6FFF') },
+                    uColor2: { value: new THREE.Color('#054099') },
+                    uColor3: { value: new THREE.Color('#00B4D8') }
+                },
+                vertexShader: `
+                    uniform float uTime;
+                    uniform vec2 uMouse;
+                    varying vec2 vUv;
+                    varying float vElevation;
+
+                    void main() {
+                        vUv = uv;
+                        vec3 pos = position;
+
+                        float wave1 = sin(pos.x * 2.0 + uTime * 0.5) * 0.15;
+                        float wave2 = sin(pos.y * 3.0 + uTime * 0.3) * 0.1;
+                        float wave3 = sin((pos.x + pos.y) * 1.5 + uTime * 0.4) * 0.08;
+
+                        float mouseInfluence = 1.0 - distance(uv, uMouse) * 2.0;
+                        mouseInfluence = max(0.0, mouseInfluence);
+
+                        pos.z = wave1 + wave2 + wave3 + mouseInfluence * 0.2;
+                        vElevation = pos.z;
+
+                        gl_Position = projectionMatrix * modelViewMatrix * vec4(pos, 1.0);
+                    }
+                `,
+                fragmentShader: `
+                    uniform float uTime;
+                    uniform vec3 uColor1;
+                    uniform vec3 uColor2;
+                    uniform vec3 uColor3;
+                    varying vec2 vUv;
+                    varying float vElevation;
+
+                    void main() {
+                        float mixFactor = (vElevation + 0.3) / 0.6;
+                        vec3 color = mix(uColor2, uColor1, mixFactor);
+                        color = mix(color, uColor3, sin(vUv.x * 10.0 + uTime) * 0.1);
+
+                        float alpha = 0.6 + vElevation * 0.4;
+                        gl_FragColor = vec4(color, alpha);
+                    }
+                `,
+                transparent: true,
+                side: THREE.DoubleSide
+            });
+
+            const water = new THREE.Mesh(waterGeometry, waterMaterial);
+            water.rotation.x = -Math.PI / 2.5;
+            water.position.y = -2;
+            scene.add(water);
+
+            // Floating particles
+            const particleGeo = new THREE.BufferGeometry();
+            const particleCount = 200;
+            const positions = new Float32Array(particleCount * 3);
+
+            for (let i = 0; i < particleCount * 3; i += 3) {
+                positions[i] = (Math.random() - 0.5) * 15;
+                positions[i + 1] = Math.random() * 8 - 2;
+                positions[i + 2] = (Math.random() - 0.5) * 15;
+            }
+
+            particleGeo.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+
+            const particleMat = new THREE.PointsMaterial({
+                color: 0xD4AF37,
+                size: 0.03,
+                transparent: true,
+                opacity: 0.6,
+                blending: THREE.AdditiveBlending
+            });
+
+            const particles = new THREE.Points(particleGeo, particleMat);
+            scene.add(particles);
+
+            // Ambient light
+            const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
+            scene.add(ambientLight);
+
+            const directionalLight = new THREE.DirectionalLight(0xffd700, 0.5);
+            directionalLight.position.set(5, 5, 5);
+            scene.add(directionalLight);
+
+            camera.position.z = 5;
+            camera.position.y = 2;
+            camera.lookAt(0, 0, 0);
+
+            // Mouse tracking for shader
+            let mouseX = 0.5, mouseY = 0.5;
+            document.addEventListener('mousemove', (e) => {
+                mouseX = e.clientX / window.innerWidth;
+                mouseY = e.clientY / window.innerHeight;
+            });
+
+            // Animation loop
+            const clock = new THREE.Clock();
+
+            function animate() {
+                requestAnimationFrame(animate);
+
+                const elapsedTime = clock.getElapsedTime();
+
+                waterMaterial.uniforms.uTime.value = elapsedTime;
+                waterMaterial.uniforms.uMouse.value.set(mouseX, mouseY);
+
+                particles.rotation.y = elapsedTime * 0.05;
+                particles.position.y = Math.sin(elapsedTime * 0.3) * 0.2;
+
+                // Subtle camera movement
+                camera.position.x = Math.sin(elapsedTime * 0.1) * 0.5;
+                camera.position.y = 2 + Math.sin(elapsedTime * 0.15) * 0.3;
+                camera.lookAt(0, 0, 0);
+
+                renderer.render(scene, camera);
+            }
+            animate();
+
+            // Resize handler
+            window.addEventListener('resize', () => {
+                camera.aspect = window.innerWidth / window.innerHeight;
+                camera.updateProjectionMatrix();
+                renderer.setSize(window.innerWidth, window.innerHeight);
+            });
+        }
+
+        // ============================================
+        // HERO ENTRANCE ANIMATIONS
+        // ============================================
+        function initHeroAnimations() {
+            const tl = gsap.timeline();
+
+            tl.to('.hero-eyebrow', {
+                opacity: 1,
+                y: 0,
+                duration: 1,
+                ease: 'expo.out'
+            })
+            .to('.hero-title .line span', {
+                opacity: 1,
+                y: 0,
+                duration: 1.2,
+                stagger: 0.15,
+                ease: 'expo.out'
+            }, '-=0.6')
+            .to('.hero-subtitle', {
+                opacity: 1,
+                y: 0,
+                duration: 1,
+                ease: 'expo.out'
+            }, '-=0.8')
+            .to('.hero-cta-group', {
+                opacity: 1,
+                y: 0,
+                duration: 1,
+                ease: 'expo.out'
+            }, '-=0.6')
+            .to('.hero-scroll-indicator', {
+                opacity: 1,
+                duration: 1,
+                ease: 'power2.out'
+            }, '-=0.4');
+
+            // Show navigation
+            gsap.to('#nav', {
+                opacity: 1,
+                y: 0,
+                duration: 1,
+                delay: 1.5,
+                ease: 'expo.out'
+            });
+        }
+
+        // ============================================
+        // LENIS SMOOTH SCROLL
+        // ============================================
+        function initSmoothScroll() {
+            const lenis = new Lenis({
+                duration: 1.2,
+                easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+                direction: 'vertical',
+                gestureDirection: 'vertical',
+                smooth: true,
+                smoothTouch: false,
+                touchMultiplier: 2
+            });
+
+            function raf(time) {
+                lenis.raf(time);
+                requestAnimationFrame(raf);
+            }
+            requestAnimationFrame(raf);
+
+            // Connect Lenis to GSAP ScrollTrigger
+            lenis.on('scroll', ScrollTrigger.update);
+            gsap.ticker.add((time) => {
+                lenis.raf(time * 1000);
+            });
+            gsap.ticker.lagSmoothing(0);
+
+            // Smooth scroll to anchors
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const target = document.querySelector(anchor.getAttribute('href'));
+                    if (target) {
+                        lenis.scrollTo(target);
+                    }
+                });
+            });
+
+            return lenis;
+        }
+
+        // ============================================
+        // SCROLL ANIMATIONS
+        // ============================================
+        function initScrollAnimations() {
+            // Navigation background on scroll
+            ScrollTrigger.create({
+                start: 'top -100',
+                onUpdate: (self) => {
+                    const nav = document.getElementById('nav');
+                    if (self.direction === 1 && self.progress > 0) {
+                        nav.classList.add('scrolled');
+                    } else if (self.progress === 0) {
+                        nav.classList.remove('scrolled');
+                    }
+                }
+            });
+
+            // Progress bar
+            gsap.to('#navProgress', {
+                scaleX: 1,
+                ease: 'none',
+                scrollTrigger: {
+                    trigger: 'body',
+                    start: 'top top',
+                    end: 'bottom bottom',
+                    scrub: 0.3
+                }
+            });
+
+            // Section headers
+            gsap.utils.toArray('.section-header').forEach(header => {
+                gsap.from(header.children, {
+                    y: 60,
+                    opacity: 0,
+                    duration: 1,
+                    stagger: 0.15,
+                    ease: 'expo.out',
+                    scrollTrigger: {
+                        trigger: header,
+                        start: 'top 80%',
+                        toggleActions: 'play none none none'
+                    }
+                });
+            });
+
+            // Destination cards
+            gsap.utils.toArray('.destination-card').forEach((card, i) => {
+                gsap.from(card, {
+                    y: 100,
+                    opacity: 0,
+                    duration: 1,
+                    delay: i * 0.1,
+                    ease: 'expo.out',
+                    scrollTrigger: {
+                        trigger: card,
+                        start: 'top 85%',
+                        toggleActions: 'play none none none'
+                    }
+                });
+            });
+
+            // Timeline items
+            gsap.utils.toArray('.timeline-item').forEach(item => {
+                gsap.to(item, {
+                    y: 0,
+                    opacity: 1,
+                    duration: 1,
+                    ease: 'expo.out',
+                    scrollTrigger: {
+                        trigger: item,
+                        start: 'top 80%',
+                        toggleActions: 'play none none none'
+                    }
+                });
+            });
+
+            // Culture cards
+            gsap.utils.toArray('.culture-card').forEach((card, i) => {
+                gsap.from(card, {
+                    y: 80,
+                    opacity: 0,
+                    duration: 0.8,
+                    delay: i * 0.1,
+                    ease: 'expo.out',
+                    scrollTrigger: {
+                        trigger: card,
+                        start: 'top 85%',
+                        toggleActions: 'play none none none'
+                    }
+                });
+            });
+
+            // Testimonial cards
+            gsap.utils.toArray('.testimonial-card').forEach((card, i) => {
+                gsap.from(card, {
+                    y: 60,
+                    opacity: 0,
+                    duration: 0.8,
+                    delay: i * 0.15,
+                    ease: 'expo.out',
+                    scrollTrigger: {
+                        trigger: card,
+                        start: 'top 85%',
+                        toggleActions: 'play none none none'
+                    }
+                });
+            });
+
+            // Parallax effects
+            gsap.utils.toArray('.destination-card-image').forEach(img => {
+                gsap.to(img, {
+                    yPercent: -10,
+                    ease: 'none',
+                    scrollTrigger: {
+                        trigger: img.closest('.destination-card'),
+                        start: 'top bottom',
+                        end: 'bottom top',
+                        scrub: true
+                    }
+                });
+            });
+        }
+
+        // ============================================
+        // 3D TILT EFFECT
+        // ============================================
+        function initTiltEffect() {
+            const cards = document.querySelectorAll('[data-tilt]');
+
+            cards.forEach(card => {
+                card.addEventListener('mousemove', (e) => {
+                    const rect = card.getBoundingClientRect();
+                    const x = e.clientX - rect.left;
+                    const y = e.clientY - rect.top;
+                    const centerX = rect.width / 2;
+                    const centerY = rect.height / 2;
+
+                    const rotateX = (y - centerY) / centerY * -10;
+                    const rotateY = (x - centerX) / centerX * 10;
+
+                    card.querySelector('.destination-card-inner').style.transform = 
+                        `rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.02)`;
+                });
+
+                card.addEventListener('mouseleave', () => {
+                    card.querySelector('.destination-card-inner').style.transform = 
+                        'rotateX(0) rotateY(0) scale(1)';
+                });
+            });
+        }
+
+        // ============================================
+        // MAGNETIC BUTTONS
+        // ============================================
+        function initMagneticButtons() {
+            const buttons = document.querySelectorAll('.magnetic');
+
+            buttons.forEach(btn => {
+                btn.addEventListener('mousemove', (e) => {
+                    const rect = btn.getBoundingClientRect();
+                    const x = e.clientX - rect.left - rect.width / 2;
+                    const y = e.clientY - rect.top - rect.height / 2;
+
+                    btn.style.transform = `translate(${x * 0.3}px, ${y * 0.3}px)`;
+                });
+
+                btn.addEventListener('mouseleave', () => {
+                    btn.style.transform = 'translate(0, 0)';
+                });
+            });
+        }
+
+        // ============================================
+        // FAQ ACCORDION
+        // ============================================
+        function initFAQ() {
+            const items = document.querySelectorAll('.faq-item');
+
+            items.forEach(item => {
+                const question = item.querySelector('.faq-question');
+
+                question.addEventListener('click', () => {
+                    const isActive = item.classList.contains('active');
+
+                    // Close all
+                    items.forEach(i => i.classList.remove('active'));
+
+                    // Open clicked if it wasn't active
+                    if (!isActive) {
+                        item.classList.add('active');
+                    }
+                });
+            });
+        }
+
+        // ============================================
+        // TRAVEL PLANNER
+        // ============================================
+        function initPlanner() {
+            const form = document.getElementById('plannerForm');
+            const result = document.getElementById('plannerResult');
+
+            form.addEventListener('submit', (e) => {
+                e.preventDefault();
+                result.classList.add('visible');
+
+                gsap.from(result, {
+                    y: 30,
+                    opacity: 0,
+                    duration: 0.8,
+                    ease: 'expo.out'
+                });
+
+                // Scroll to result
+                setTimeout(() => {
+                    result.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }, 300);
+            });
+        }
+
+        // ============================================
+        // KONAMI CODE EASTER EGG
+        // ============================================
+        function initKonamiCode() {
+            const olympusMode = document.getElementById('olympusMode');
+            const olympusClose = document.getElementById('olympusClose');
+
+            document.addEventListener('keydown', (e) => {
+                state.konamiCode.push(e.key);
+                state.konamiCode = state.konamiCode.slice(-10);
+
+                if (state.konamiCode.join(',') === state.konamiSequence.join(',')) {
+                    olympusMode.classList.add('active');
+                }
+            });
+
+            olympusClose.addEventListener('click', () => {
+                olympusMode.classList.remove('active');
+            });
+        }
+
+        // ============================================
+        // NAVIGATION SMOOTH SCROLL
+        // ============================================
+        function initNavigation() {
+            const navLinks = document.querySelectorAll('.nav-link');
+
+            navLinks.forEach(link => {
+                link.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const target = document.querySelector(link.getAttribute('href'));
+                    if (target) {
+                        target.scrollIntoView({ behavior: 'smooth' });
+                    }
+                });
+            });
+        }
+
+        // ============================================
+        // INITIALIZE
+        // ============================================
+        function init() {
+            initLoading();
+            initCursor();
+            initParticles();
+            initHeroScene();
+            initSmoothScroll();
+            initScrollAnimations();
+            initTiltEffect();
+            initMagneticButtons();
+            initFAQ();
+            initPlanner();
+            initKonamiCode();
+            initNavigation();
+        }
+
+        // Start when DOM is ready
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', init);
+        } else {
+            init();
+        }
+
+    })();
+    </script>
+</body>
+</html>
